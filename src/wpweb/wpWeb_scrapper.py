@@ -30,21 +30,32 @@ def open_whatsapp_web():
     return driver
 
 def scrape_messages(driver):
-    # Wait for the chats to load
-    time.sleep(10)
+    time.sleep(15)  # Increased wait time
+    
+    # Print the current URL to ensure the correct page is loaded
+    print(f"Current URL: {driver.current_url}")
     
     # Find the chat list
     chat_list = driver.find_elements(By.CLASS_NAME, "_2wP_Y")
+    print(f"Found {len(chat_list)} chats.")
     
-    # Loop through each chat and save messages
+    # Print chat elements (for debugging)
+    for chat in chat_list:
+        print(chat.text)
+    
+    # Proceed with scraping
     for chat in chat_list:
         chat.click()
-        time.sleep(3)  # Wait for chat to open
+        time.sleep(3)
         
         # Scrape the chat
-        contact_name = driver.find_element(By.CLASS_NAME, "_21nHd").text
-        chat_number = driver.find_element(By.CLASS_NAME, "_3WQ4x").text  # Contact number
-        messages = driver.find_elements(By.CLASS_NAME, "_1Gy50")  # Messages container
+        try:
+            contact_name = driver.find_element(By.CLASS_NAME, "_21nHd").text
+            chat_number = driver.find_element(By.CLASS_NAME, "_3WQ4x").text  # Contact number
+            messages = driver.find_elements(By.CLASS_NAME, "_1Gy50")  # Messages container
+        except Exception as e:
+            print(f"Error finding elements: {e}")
+            continue
 
         # Extract messages
         chat_text = []
@@ -58,6 +69,7 @@ def scrape_messages(driver):
             file.write("\n".join(chat_text))
     
     print("Scraping completed.")
+
 
 if __name__ == "__main__":
     driver = open_whatsapp_web()

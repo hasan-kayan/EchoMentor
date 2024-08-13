@@ -1,7 +1,0 @@
-[97103:259:0813/161012.839411:WARNING:chrome_main_delegate.cc(744)] This is Chrome version 127.0.6533.89 (not a warning)
-[97103:259:0813/161013.144318:INFO:chrome_browser_cloud_management_controller.cc(196)] No machine level policy manager exists.
-[97103:259:0813/161013.249869:WARNING:browser_management_service.cc(128)] EnterpriseLogoUrl fetch failed with error code -1 and MIME type 
-[97103:259:0813/161014.314585:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'battery'.", source:  (0)
-[97103:259:0813/161014.314612:INFO:CONSOLE(0)] "Error with Permissions-Policy header: Unrecognized feature: 'usb-unrestricted'.", source:  (0)
-[97103:259:0813/161015.987507:INFO:CONSOLE(150)] "Event handler of 'x-storagemutated-1' event must be added on the initial evaluation of worker script.", source: https://static.whatsapp.net/rsrc.php/v3/yO/r/Jo0c6tF3m4a.js?_nc_x=Ij3Wp8lg5Kz (150)
-[97103:259:0813/161019.730257:WARNING:pref_notifier_impl.cc(41)] Pref observer for media_router.cast_allow_all_ips found at shutdown.
