@@ -25,18 +25,19 @@ def scan_ports(start_port, end_port):
     return available_ports
 
 # Run the port scan
-print(f"Scanning ports {start_port}-{end_port} on localhost...")
-open_ports = scan_ports(start_port, end_port)
+def main():
+    print(f"Scanning ports {start_port}-{end_port} on localhost...")
+    open_ports = scan_ports(start_port, end_port)
 
-# Print the results
-if open_ports:
-    print(f"Available ports: {open_ports}")
-else:
-    print("No available ports found.")
+    # Return the results
+    return open_ports
 
-# Save the results to a file
-with open('available_ports.txt', 'w') as f:
-    for port in open_ports:
-        f.write(f"{port}\n")
+# Execute the scan and handle the results
+if __name__ == "__main__":
+    open_ports = main()
 
-print("Scan complete. Results saved to 'available_ports.txt'.")
+    # Print the results
+    if open_ports:
+        print(f"Available ports: {open_ports}")
+    else:
+        print("No available ports found.")
