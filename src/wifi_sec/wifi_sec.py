@@ -196,9 +196,66 @@ def check_wifi_security():
         "SSID Hidden": ssid_hidden,
         "Default Password Check": default_password_check
     }
+    
+
+
+def get_wifi_password_macos(ssid):
+    try:
+        command = f"security find-generic-password -D 'AirPort network password' -a {ssid} -w"
+        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
+        password = result.decode('utf-8').strip()
+        return password
+    except subprocess.CalledProcessError as e:
+        error_output = e.output.decode('utf-8').strip()
+        if "could not be found in the keychain" in error_output:
+            return f"Could not find the Wi-Fi password for SSID '{ssid}' in the keychain."
+        elif "User interaction is not allowed" in error_output:
+            return "User interaction is not allowed. Try running the script in a user session with the correct permissions."
+        else:
+            return f"An error occurred: {error_output}"
+
+
+
+def get_wifi_password_windows(ssid):
+    try:
+        command = f"netsh wlan show profile name=\"{ssid}\" key=clear"
+        result = subprocess.check_output(command, shell=True)
+        result = result.decode('utf-8').split('\n')
+        for line in result:
+            if "Key Content" in line:
+                password = line.split(":")[1].strip()
+                return password
+        return "No password found or could not retrieve the Wi-Fi password."
+    except subprocess.CalledProcessError:
+        return "Could not retrieve the Wi-Fi password."
+
+def get_wifi_password_linux(ssid):
+    try:
+        command = f"nmcli -s -g 802-11-wireless-security.psk connection show \"{ssid}\""
+        result = subprocess.check_output(command, shell=True)
+        password = result.decode('utf-8').strip()
+        return password
+    except subprocess.CalledProcessError:
+        return "Could not retrieve the Wi-Fi password."
+    
+def get_wifi_password(ssid):
+    os_type = platform.system()
+
+    if os_type == "Linux":
+        return get_wifi_password_linux(ssid)
+    elif os_type == "Darwin":  # macOS
+        return get_wifi_password_macos(ssid)
+    elif os_type == "Windows":
+        return get_wifi_password_windows(ssid)
+    else:
+        return "Unsupported operating system."
 
 # Run the Wi-Fi security check
 if __name__ == "__main__":
     security_report = check_wifi_security()
     for key, value in security_report.items():
         print(f"{key}: {value}")
+# Example usage
+ssid = "Your_SSID_Name"
+password = get_wifi_password(ssid)
+print(f"The password for {ssid} is: {password}")
