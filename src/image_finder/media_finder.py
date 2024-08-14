@@ -11,7 +11,16 @@ video_extensions = ['.mp4', '.avi', '.mov', '.mkv', '.flv', '.wmv', '.webm']
 media_extensions = image_extensions + video_extensions
 
 def search_media_files(root_folder):
-    """Search for media files and return their paths."""
+    """
+    Search for media files in the given root folder and return their paths.
+
+    Args:
+        root_folder (str): The root folder to start the search from.
+
+    Returns:
+        list: A list of paths to the found media files.
+
+    """
     media_files = []
     for root, dirs, files in os.walk(root_folder):
         for file in files:
@@ -21,7 +30,17 @@ def search_media_files(root_folder):
     return media_files
 
 def clone_media_files(media_files, destination_folder="Cloned_Media"):
-    """Clone the media files to the destination folder."""
+    """Clone the media files to the destination folder.
+
+    Args:
+        media_files (list): A list of file paths to be cloned.
+        destination_folder (str, optional): The destination folder where the files will be cloned.
+            Defaults to "Cloned_Media".
+
+    Returns:
+        None
+
+    """
     # Create the destination folder if it doesn't exist
     if not os.path.exists(destination_folder):
         os.makedirs(destination_folder)

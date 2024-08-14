@@ -5,6 +5,16 @@ import os
 
 # Function to check Wi-Fi encryption type
 def check_wifi_encryption():
+    """
+    Checks the Wi-Fi encryption type and returns the SSID and security type.
+
+    Returns:
+        str: A string containing the SSID and security type of the Wi-Fi connection.
+
+    Raises:
+        Exception: If there is an error checking the Wi-Fi encryption.
+
+    """
     os_type = platform.system()
 
     if os_type == "Linux":
@@ -69,6 +79,17 @@ def check_wifi_encryption():
 
 # Function to scan router ports
 def scan_router_ports(router_ip, start_port=1, end_port=1024):
+    """
+    Scans the specified range of ports on a router to check for open ports.
+
+    Args:
+        router_ip (str): The IP address of the router to scan.
+        start_port (int, optional): The starting port number of the scan range. Defaults to 1.
+        end_port (int, optional): The ending port number of the scan range. Defaults to 1024.
+
+    Returns:
+        list: A list of open ports found during the scan.
+    """
     open_ports = []
 
     for port in range(start_port, end_port + 1):
@@ -88,6 +109,15 @@ def scan_router_ports(router_ip, start_port=1, end_port=1024):
 
 # Function to find router IP address
 def get_router_ip():
+    """
+    Retrieves the IP address of the default gateway router.
+
+    Returns:
+        str: The IP address of the default gateway router.
+
+    Raises:
+        Exception: If there is an error retrieving the router IP.
+    """
     os_type = platform.system()
 
     try:
@@ -116,6 +146,16 @@ def get_router_ip():
 
 # Function to check if SSID is hidden
 def check_ssid_hidden():
+    """
+    Check the hidden status of the SSID for the current Wi-Fi connection.
+
+    Returns:
+        str: A string indicating the SSID and its hidden status.
+
+    Raises:
+        Exception: If there is an error checking the SSID hidden status.
+
+    """
     os_type = platform.system()
 
     if os_type == "Linux":
@@ -174,6 +214,15 @@ def check_ssid_hidden():
 
 # Function to check for weak or default passwords (simple check)
 def check_default_passwords(router_ip):
+    """
+    Checks if the router has a web interface with default credentials on common ports.
+
+    Args:
+        router_ip (str): The IP address of the router.
+
+    Returns:
+        str: A message indicating whether a web interface with default credentials is detected on common ports or not.
+    """
     common_ports = [80, 443, 8080, 8443]
     open_ports = scan_router_ports(router_ip, start_port=min(common_ports), end_port=max(common_ports))
 
@@ -183,6 +232,17 @@ def check_default_passwords(router_ip):
 
 # Main function to run all checks
 def check_wifi_security():
+    """
+    Checks the security status of the Wi-Fi network.
+
+    Returns:
+        A dictionary containing the following information:
+        - "Encryption": The type of encryption used by the Wi-Fi network.
+        - "Router IP": The IP address of the router.
+        - "Open Ports": A list of open ports on the router.
+        - "SSID Hidden": Indicates whether the SSID is hidden or not.
+        - "Default Password Check": Indicates whether the router is using a default password or not.
+    """
     encryption = check_wifi_encryption()
     router_ip = get_router_ip()
     open_ports = scan_router_ports(router_ip)
@@ -200,6 +260,20 @@ def check_wifi_security():
 
 
 def get_wifi_password_macos(ssid):
+    """
+    Retrieves the Wi-Fi password for a given SSID on macOS.
+
+    Args:
+        ssid (str): The SSID of the Wi-Fi network.
+
+    Returns:
+        str: The Wi-Fi password for the specified SSID, if found in the keychain.
+             If the password is not found, a message indicating the failure reason is returned.
+
+    Raises:
+        subprocess.CalledProcessError: If an error occurs while executing the command.
+
+    """
     try:
         command = f"security find-generic-password -D 'AirPort network password' -a {ssid} -w"
         result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
@@ -217,6 +291,15 @@ def get_wifi_password_macos(ssid):
 
 
 def get_wifi_password_windows(ssid):
+    """
+    Retrieves the Wi-Fi password for a given SSID on Windows.
+
+    Args:
+        ssid (str): The SSID of the Wi-Fi network.
+
+    Returns:
+        str: The Wi-Fi password if found, or an error message if the password could not be retrieved.
+    """
     try:
         command = f"netsh wlan show profile name=\"{ssid}\" key=clear"
         result = subprocess.check_output(command, shell=True)
@@ -229,7 +312,18 @@ def get_wifi_password_windows(ssid):
     except subprocess.CalledProcessError:
         return "Could not retrieve the Wi-Fi password."
 
+
 def get_wifi_password_linux(ssid):
+    """
+    Retrieves the Wi-Fi password for a given SSID on a Linux system.
+
+    Args:
+        ssid (str): The SSID of the Wi-Fi network.
+
+    Returns:
+        str: The Wi-Fi password if it is successfully retrieved, or a message indicating failure.
+
+    """
     try:
         command = f"nmcli -s -g 802-11-wireless-security.psk connection show \"{ssid}\""
         result = subprocess.check_output(command, shell=True)
@@ -239,6 +333,19 @@ def get_wifi_password_linux(ssid):
         return "Could not retrieve the Wi-Fi password."
     
 def get_wifi_password(ssid):
+    """
+    Retrieves the password for the specified Wi-Fi network.
+
+    Args:
+        ssid (str): The SSID (network name) of the Wi-Fi network.
+
+    Returns:
+        str: The password for the specified Wi-Fi network.
+
+    Raises:
+        None
+
+    """
     os_type = platform.system()
 
     if os_type == "Linux":
@@ -255,7 +362,3 @@ if __name__ == "__main__":
     security_report = check_wifi_security()
     for key, value in security_report.items():
         print(f"{key}: {value}")
-# Example usage
-ssid = "Your_SSID_Name"
-password = get_wifi_password(ssid)
-print(f"The password for {ssid} is: {password}")

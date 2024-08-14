@@ -5,7 +5,19 @@ start_port = 1
 end_port = 65535
 
 # Function to scan ports
+import socket
+
 def scan_ports(start_port, end_port):
+    """
+    Scans a range of ports on the localhost and returns a list of available ports.
+
+    Args:
+        start_port (int): The starting port number.
+        end_port (int): The ending port number.
+
+    Returns:
+        list: A list of available ports within the specified range.
+    """
     available_ports = []
 
     for port in range(start_port, end_port + 1):

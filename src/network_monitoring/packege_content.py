@@ -12,6 +12,14 @@ def get_packet_details(packet):
     
     Returns:
         dict: A dictionary containing the time, summary, and raw content of the packet.
+        
+    Raises:
+        None
+        
+    Examples:
+        >>> packet = scapy.packet.Packet()
+        >>> get_packet_details(packet)
+        {'time': datetime.datetime, 'summary': str, 'raw_content': bytes}
     """
     if packet.haslayer(Raw):
         return {

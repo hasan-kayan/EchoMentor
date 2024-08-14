@@ -6,6 +6,16 @@ import datetime
 def format_bytes(size):
     """
     Convert bytes to a human-readable format.
+
+    Parameters:
+    - size (int): The size in bytes to be converted.
+
+    Returns:
+    - str: The human-readable format of the size.
+
+    Example:
+    >>> format_bytes(1024)
+    '1.00 KB'
     """
     power = 1024
     n = 0
@@ -21,6 +31,11 @@ def get_network_activity():
     
     Returns:
         dict: A dictionary containing the network activity statistics.
+            - time (datetime): The current timestamp.
+            - bytes_sent (str): The number of bytes sent.
+            - bytes_received (str): The number of bytes received.
+            - packets_sent (int): The number of packets sent.
+            - packets_received (int): The number of packets received.
     """
     # Get network I/O statistics since boot
     net_io = psutil.net_io_counters()
