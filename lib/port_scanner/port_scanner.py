@@ -1,22 +1,15 @@
 import socket
 
-# Define the range of ports to scan
-start_port = 1
-end_port = 65535
-
-# Function to scan ports
-import socket
-
 def scan_ports(start_port, end_port):
     """
-    Scans a range of ports on the localhost and returns a list of available ports.
+    Scans a range of ports on the localhost and returns a list of open ports.
 
     Args:
         start_port (int): The starting port number.
         end_port (int): The ending port number.
 
     Returns:
-        list: A list of available ports within the specified range.
+        list: A list of open ports within the specified range.
     """
     available_ports = []
 
@@ -36,20 +29,18 @@ def scan_ports(start_port, end_port):
 
     return available_ports
 
-# Run the port scan
-def main():
+def main(start_port, end_port):
+    """
+    Executes the port scan on localhost.
+
+    Args:
+        start_port (int): The starting port number.
+        end_port (int): The ending port number.
+
+    Returns:
+        list: A list of open ports within the specified range.
+    """
     print(f"Scanning ports {start_port}-{end_port} on localhost...")
     open_ports = scan_ports(start_port, end_port)
 
-    # Return the results
     return open_ports
-
-# Execute the scan and handle the results
-if __name__ == "__main__":
-    open_ports = main()
-
-    # Print the results
-    if open_ports:
-        print(f"Available ports: {open_ports}")
-    else:
-        print("No available ports found.")

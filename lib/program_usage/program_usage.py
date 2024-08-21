@@ -3,20 +3,32 @@ import platform
 import subprocess
 import datetime
 
-# Function to get last used applications on Windows
 def get_last_used_apps_windows():
+    """
+    Retrieves the last used applications on Windows.
+
+    Returns:
+        str: A string with information about the last used applications.
+    """
     try:
-        # Use a Windows command to get last used applications
-        cmd = 'powershell "Get-Process | Sort-Object StartTime | Select-Object Name, StartTime | Where-Object { $_.StartTime -ne $null } | Sort-Object StartTime -Descending | Select-Object -First 10"'
+        cmd = (
+            'powershell "Get-Process | Sort-Object StartTime | '
+            'Select-Object Name, StartTime | Where-Object { $_.StartTime -ne $null } | '
+            'Sort-Object StartTime -Descending | Select-Object -First 10"'
+        )
         result = subprocess.check_output(cmd, shell=True)
         return result.decode('utf-8')
     except Exception as e:
         return f"Error: {e}"
 
-# Function to get last used applications on Mac
 def get_last_used_apps_mac():
+    """
+    Retrieves the last used applications on Mac.
+
+    Returns:
+        str: A string with information about the last used applications.
+    """
     try:
-        # Use AppleScript to get the last used applications on Mac
         script = '''
         tell application "System Events"
             set app_list to ""
@@ -31,25 +43,39 @@ def get_last_used_apps_mac():
     except Exception as e:
         return f"Error: {e}"
 
-# Function to log last used applications
-def log_last_used_apps():
+def get_last_used_apps():
+    """
+    Gets the last used applications based on the operating system.
+
+    Returns:
+        str: A string with information about the last used applications or an error message if the OS is unsupported.
+    """
     os_type = platform.system()
 
     if os_type == "Windows":
-        apps_info = get_last_used_apps_windows()
+        return get_last_used_apps_windows()
     elif os_type == "Darwin":
-        apps_info = get_last_used_apps_mac()
+        return get_last_used_apps_mac()
     else:
-        apps_info = "Unsupported Operating System"
+        return "Unsupported Operating System"
 
-    # Save the result to a log file
+def log_last_used_apps():
+    """
+    Logs the last used applications to a file.
+
+    Returns:
+        str: A string with information about the last used applications.
+    """
+    apps_info = get_last_used_apps()
+
     log_file = "last_used_apps.txt"
     with open(log_file, 'w') as f:
         f.write(f"Last Used Applications ({datetime.datetime.now()}):\n\n")
         f.write(apps_info)
 
     print(f"Last used applications logged to {log_file}")
-    print(apps_info)
+    return apps_info
 
-# Run the function to log last used applications
-log_last_used_apps()
+# Example usage:
+# apps_info = get_last_used_apps()
+# print(apps_info)
