@@ -1,1 +1,0 @@
-from lib.scanner import *
