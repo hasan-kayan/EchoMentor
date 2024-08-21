@@ -1,5 +1,3 @@
-# network_monitor.py
-
 import psutil
 import datetime
 
