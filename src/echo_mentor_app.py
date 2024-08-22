@@ -1,5 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout
+
+# MY LIBRARIES
 from Components.tool_bar import ToolBar
 
 class MainWindow(QMainWindow):

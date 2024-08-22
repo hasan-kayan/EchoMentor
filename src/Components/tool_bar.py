@@ -1,5 +1,7 @@
 from PyQt6.QtWidgets import QToolBar, QMainWindow, QDialog, QLabel, QVBoxLayout, QPushButton, QMessageBox
 from PyQt6.QtGui import QAction, QIcon
+from .wifi_modal import WifiSecurityModal
+
 
 class ToolBar(QToolBar):
     def __init__(self, parent: QMainWindow):
@@ -10,16 +12,19 @@ class ToolBar(QToolBar):
         self.openModalAction = QAction(QIcon(None), "Open Modal", self)
         self.triggerWidgetAction = QAction(QIcon(None), "Trigger Widget", self)
         self.showInfoAction = QAction(QIcon(None), "Show Info", self)
+        self.wifiSecurityAction = QAction(QIcon(None), "Wi-Fi Security Check", self)  # New action for Wi-Fi security check
 
         # Add actions to the toolbar
         self.addAction(self.openModalAction)
         self.addAction(self.triggerWidgetAction)
         self.addAction(self.showInfoAction)
+        self.addAction(self.wifiSecurityAction)  # Add the Wi-Fi security action to the toolbar
 
         # Connect actions to their corresponding functions
         self.openModalAction.triggered.connect(self.open_modal)
         self.triggerWidgetAction.triggered.connect(self.trigger_widget)
         self.showInfoAction.triggered.connect(self.show_info)
+        self.wifiSecurityAction.triggered.connect(self.open_wifi_security_modal)  # Connect the Wi-Fi security action
 
     def open_modal(self):
         modal = QDialog(self)
@@ -43,3 +48,7 @@ class ToolBar(QToolBar):
         info_msg.setWindowTitle("Information")
         info_msg.setStandardButtons(QMessageBox.StandardButton.Ok)
         info_msg.exec()
+
+    def open_wifi_security_modal(self):
+        modal = WifiSecurityModal(self)
+        modal.exec()
