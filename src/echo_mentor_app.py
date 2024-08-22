@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHB
 
 # MY LIBRARIES
 from Components.tool_bar import ToolBar
+from Components.performance_panel import PerformanceMonitorWidget  # Import the performance monitor widget
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -33,8 +34,9 @@ class MainWindow(QMainWindow):
         # Add the toolbar layout to the main layout
         main_layout.addLayout(toolbar_layout)
 
-        # Add stretch to push the toolbar to the top middle
-        main_layout.addStretch(1)
+        # Add the performance monitor widget below the toolbar
+        self.performance_monitor = PerformanceMonitorWidget(self)
+        main_layout.addWidget(self.performance_monitor)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
